@@ -24,3 +24,28 @@ def on_intent(event, context):
         return stop_intent()
     else:
         return statement("Please try again", "I could not recognize a request for a definition. Please ask again.")
+
+
+# Responses
+def statement(title, body):
+    speechlet = {}
+    speechlet['outputSpeech'] = build_plain_speech(body)
+    speechlet['card'] = build_simple_card(title, body)
+    if title in ("Stop", "Cancel"):
+        speechlet['shouldEndSession'] = True
+    else:
+        speechlet['shouldEndSession'] = False
+    return build_response(speechlet)
+
+
+# Built-in Intents
+def cancel_intent():
+    return statement("Cancel", "CSWiki will now stop. Thank you!")
+
+
+def help_intent():
+    return statement("Help", "You are seeking for help")
+
+
+def stop_intent():
+    return statement("Stop", "CSWiki will now stop. Thank you!")
