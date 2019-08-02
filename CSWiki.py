@@ -1,21 +1,21 @@
 # Program Entry
 def lambda_handler(event, context):
     if event['request']['type'] == "LaunchRequest":
-        return on_launch(event, context)
+        return on_launch()
     elif event['request']['type'] == "IntentRequest":
-        return on_intent(event, context)
+        return on_intent(event)
 
 
 # Launch
-def on_launch(event, context):
+def on_launch():
     return statement("Greetings", "Welcome to the CS Wiki!")
 
 
 # Intent Routing
-def on_intent(event, context):
+def on_intent(event):
     intent = event['request']['intent']['name']
     if intent == "AskDefinitionIntent":
-        return ask_definition_intent(event, context)
+        return ask_definition_intent(event)
     if intent == "AMAZON.CancelIntent":
         return cancel_intent()
     if intent == "AMAZON.HelpIntent":
@@ -28,9 +28,7 @@ def on_intent(event, context):
 
 # Responses
 def statement(title, body):
-    speechlet = {}
-    speechlet['outputSpeech'] = build_plain_speech(body)
-    speechlet['card'] = build_simple_card(title, body)
+    speechlet = {'outputSpeech': build_plain_speech(body), 'card': build_simple_card(title, body)}
     if title in ("Stop", "Cancel"):
         speechlet['shouldEndSession'] = True
     else:
@@ -52,7 +50,7 @@ def stop_intent():
 
 
 # Custom Intents
-def ask_definition_intent(event, context):
+def ask_definition_intent(event):
     class_def = "Classes are templates used in object-oriented programming to create objects, which are instances" \
                 " of that class.  All classes may contain variable definitions and methods."
     method_def = "A method is a procedure or function associated with a class. As part of a class, a method defines a" \
@@ -102,23 +100,15 @@ def ask_definition_intent(event, context):
 
 # Builders
 def build_plain_speech(body):
-    speech = {}
-    speech['type'] = 'PlainText'
-    speech['text'] = body
+    speech = {'type': 'PlainText', 'text': body}
     return speech
 
 
 def build_simple_card(title, body):
-    card = {}
-    card['type'] = 'Simple'
-    card['title'] = title
-    card['content'] = body
+    card = {'type': 'Simple', 'title': title, 'content': body}
     return card
 
 
 def build_response(message, session_attributes={}):
-    response = {}
-    response['version'] = '1.0'
-    response['sessionAttributes'] = session_attributes
-    response['response'] = message
+    response = {'version': '1.0', 'sessionAttributes': session_attributes, 'response': message}
     return response
