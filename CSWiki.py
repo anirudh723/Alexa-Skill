@@ -98,3 +98,27 @@ def ask_definition_intent(event, context):
         return statement("Definition of word", facts.get(asked_word))
     else:
         return statement("Definition not found", "I could not find a definition for this word")
+
+
+# Builders
+def build_plain_speech(body):
+    speech = {}
+    speech['type'] = 'PlainText'
+    speech['text'] = body
+    return speech
+
+
+def build_simple_card(title, body):
+    card = {}
+    card['type'] = 'Simple'
+    card['title'] = title
+    card['content'] = body
+    return card
+
+
+def build_response(message, session_attributes={}):
+    response = {}
+    response['version'] = '1.0'
+    response['sessionAttributes'] = session_attributes
+    response['response'] = message
+    return response
